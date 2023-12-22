@@ -7,5 +7,12 @@ namespace AddressApi.Controllers
     [ApiController]
     public class AddressController : ControllerBase
     {
+        private readonly string _addressesFilePath;
+        public AddressController(IConfiguration configuration)
+        {
+            _addressesFilePath = configuration["AddressFilePath"];
+        }
+
+
     }
 }
