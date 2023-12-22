@@ -1,4 +1,5 @@
 ﻿using AddressApi.DataAccess;
+using AddressApi.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -18,6 +19,29 @@ namespace AddressApi.Controllers
             _fileHandler = fileHandler;
         }
 
+        [HttpPost("SaveAddress")]
+        public IActionResult SaveAddress([FromForm] string address)
+        {
+            var addressJson = _serialization.SerilizeToJson(new Address { AddressName = address, AddressID = Guid.NewGuid().ToString() });
+            _fileHandler.SaveToFile(addressJson);
+            return Ok();
+        }
+
+        [HttpGet("GetAddress/{id}")]
+        public IActionResult GetAddressById(string id)
+        {
+            var addressArr = _fileHandler.ReadFile();
+
+            foreach (var address in addressArr)
+            {
+                var currentAdderss = _serialization.DeserilizeJson(address);
+                if (currentAdderss.AddressID == id)
+                {
+                    return Ok(currentAdderss);
+                }
+            }
+            return NotFound();
+        }
 
     }
 }
