@@ -1,3 +1,5 @@
+using AddressApi.DataAccess;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +9,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors();
+
+#region DI
+builder.Services.AddScoped<Serialization>();
+builder.Services.AddScoped<FileHandler>();
+#endregion
 
 var app = builder.Build();
 
